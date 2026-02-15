@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - <%= businessName %></title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Effet de particules mystiques */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 200px 200px, 300px 300px, 250px 250px;
+            animation: float 20s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-200px); }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .business-name {
+            color: #667eea;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .message {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .stars {
+            font-size: 40px;
+            margin-bottom: 25px;
+            letter-spacing: 5px;
+            color: #ffd700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .redirect-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-top: 25px;
+            display: inline-block;
+        }
+
+        .countdown {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .business-name {
+                font-size: 20px;
+            }
+
+            .message {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎭✨</div>
+        
+        <h1>Merci pour votre visite !</h1>
+        <div class="business-name"><%= businessName %></div>
+        
+        <div class="stars">★ ★ ★ ★ ★</div>
+        
+        <div class="message">
+            Votre avis compte énormément pour nous ! 💜<br><br>
+            Prenez quelques instants pour partager votre expérience magique avec notre communauté sur Google.
+            <br><br>
+            Cela nous aide à continuer d'offrir des expériences inoubliables.
+        </div>
+
+        <a href="<%= googleReviewUrl %>" class="btn" id="reviewButton">
+            ⭐ Laisser un avis maintenant
+        </a>
+
+        <div class="redirect-info">
+            Redirection automatique dans <span class="countdown" id="countdown">3</span> secondes...
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: rgba(255, 215, 0, 0.1); border-radius: 12px; border: 2px dashed gold;">
+            <p style="color: #333; font-size: 16px; margin-bottom: 10px;">
+                <strong>🎁 Bonus : Après avoir laissé votre avis...</strong>
+            </p>
+            <a href="/roue?reviewed=true" style="display: inline-block; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #333; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
+                🎰 Tournez la roue et gagnez un cadeau !
+            </a>
+        </div>
+
+        <div class="footer">
+            🔮 Morpheus Experience - Strasbourg<br>
+            Escape Game • Boutique Mystique • Salon de Thé
+        </div>
+    </div>
+
+    <script>
+        // Redirection automatique après 3 secondes
+        let timeLeft = Math.floor(<%= redirectDelay %> / 1000);
+        const countdownElement = document.getElementById('countdown');
+        const reviewUrl = '<%= googleReviewUrl %>';
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            countdownElement.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                window.location.href = reviewUrl;
+            }
+        }, 1000);
+
+        // Si l'utilisateur clique sur le bouton, annuler le timer et rediriger immédiatement
+        document.getElementById('reviewButton').addEventListener('click', () => {
+            clearInterval(countdown);
+        });
+
+        // Analytics (optionnel - décommenter si vous utilisez Google Analytics)
+        // gtag('event', 'review_page_view', {
+        //     'event_category': 'reviews',
+        //     'event_label': 'review_page_loaded'
+        // });
+    </script>
+</body>
+</html>
