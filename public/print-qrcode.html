@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code - Morpheus Experience</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: white;
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 20mm;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+        }
+
+        .logo {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .business-name {
+            color: #667eea;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .qr-container {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            display: inline-block;
+        }
+
+        #qrcode {
+            display: inline-block;
+        }
+
+        .message {
+            color: #555;
+            font-size: 24px;
+            line-height: 1.6;
+            margin: 30px 0;
+            font-weight: 500;
+        }
+
+        .stars {
+            font-size: 50px;
+            letter-spacing: 10px;
+            margin: 20px 0;
+        }
+
+        .instruction {
+            background: #667eea;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 30px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            color: #888;
+            font-size: 16px;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+        }
+
+        /* Boutons d'action (non imprimés) */
+        .actions {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="actions no-print">
+        <button class="btn" onclick="window.print()">🖨️ Imprimer</button>
+        <button class="btn" onclick="downloadPNG()">📥 Télécharger PNG</button>
+    </div>
+
+    <div class="page">
+        <div class="card">
+            <div class="logo">🎭✨</div>
+            
+            <h1>Votre avis compte !</h1>
+            <div class="business-name">Morpheus Experience</div>
+            
+            <div class="stars">★ ★ ★ ★ ★</div>
+            
+            <div class="message">
+                Scannez ce QR Code pour<br>
+                laisser votre avis Google
+            </div>
+
+            <div class="qr-container">
+                <div id="qrcode"></div>
+            </div>
+
+            <div class="instruction">
+                📱 Pointez votre caméra ici
+            </div>
+
+            <div class="footer">
+                🔮 Escape Game • Boutique Mystique • Salon de Thé<br>
+                Strasbourg, France
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <script>
+        // URL à modifier selon votre configuration
+        const reviewUrl = window.location.origin + '/avis';
+
+        // Générer le QR code
+        const qrcode = new QRCode(document.getElementById('qrcode'), {
+            text: reviewUrl,
+            width: 300,
+            height: 300,
+            colorDark: '#333333',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // Fonction pour télécharger le QR code en PNG
+        function downloadPNG() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'morpheus-qrcode-avis.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            }
+        }
+    </script>
+</body>
+</html>

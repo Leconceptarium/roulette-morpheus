@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentez votre chance ! - Morpheus Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Effet de particules mystiques */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 200px 200px, 300px 300px;
+            animation: float 20s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-200px); }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .business-name {
+            color: #667eea;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .intro-text {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 30px auto;
+        }
+
+        .wheel-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+        }
+
+        #wheel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 10px solid #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        }
+
+        .arrow {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 30px solid #ff4757;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+            z-index: 10;
+        }
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .center-circle:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .center-circle:active {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+
+        .spin-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin-top: 20px;
+        }
+
+        .spin-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .spin-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-popup.show {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .result-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: popIn 0.5s ease-out;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .result-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 0.5s ease-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .result-title {
+            color: #667eea;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .result-description {
+            color: #555;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .prize-code {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 30px;
+            border: 2px dashed #667eea;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .note {
+            color: #888;
+            font-size: 14px;
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .business-name {
+                font-size: 18px;
+            }
+
+            .wheel-container {
+                max-width: 300px;
+            }
+
+            .center-circle {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎭✨</div>
+        <h1>Tentez votre chance !</h1>
+        <div class="business-name">Morpheus Experience</div>
+        
+        <div class="intro-text">
+            <strong>🎁 Tournez la roue et gagnez un cadeau !</strong><br>
+            Mais d'abord, laissez-nous un avis sur Google pour débloquer votre chance 🌟
+        </div>
+
+        <div class="wheel-container">
+            <div class="arrow"></div>
+            <div class="wheel-wrapper">
+                <canvas id="wheel" width="400" height="400"></canvas>
+                <div class="center-circle" onclick="checkAndSpin()">🎰</div>
+            </div>
+        </div>
+
+        <button class="spin-button" id="spinBtn" onclick="checkAndSpin()">
+            ⭐ Laisser un avis et tourner !
+        </button>
+
+        <p class="note">
+            La roue se débloquera après avoir laissé votre avis ⭐
+        </p>
+    </div>
+
+    <!-- Popup de résultat -->
+    <div class="result-popup" id="resultPopup">
+        <div class="result-content">
+            <div class="result-icon" id="resultIcon">🎉</div>
+            <div class="result-title" id="resultTitle">Félicitations !</div>
+            <div class="result-description" id="resultDescription">
+                Vous avez gagné un cadeau mystère !
+            </div>
+            <div class="prize-code" id="prizeCode">CODE123</div>
+            <p style="color: #888; margin-bottom: 20px;">
+                Présentez ce code lors de votre prochaine visite
+            </p>
+            <button class="cta-button" onclick="closePopup()">
+                🎭 Fermer
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration de la roue
+        const prizes = [
+            { text: '10% de réduction', color: '#FF6B6B', icon: '🎁', code: 'MORPHEUS10' },
+            { text: 'Boisson offerte', color: '#4ECDC4', icon: '☕', code: 'DRINK2024' },
+            { text: '1 jeu gratuit', color: '#FFD93D', icon: '🎮', code: 'FREEGAME' },
+            { text: '15% de réduction', color: '#95E1D3', icon: '💎', code: 'MORPHEUS15' },
+            { text: 'Cadeau mystère', color: '#F38181', icon: '🎁', code: 'MYSTERY' },
+            { text: 'Café + pâtisserie', color: '#AA96DA', icon: '🍰', code: 'SWEET2024' },
+            { text: '20% de réduction', color: '#FCBAD3', icon: '⭐', code: 'MORPHEUS20' },
+            { text: 'Carte fidélité VIP', color: '#A8D8EA', icon: '👑', code: 'VIP2024' }
+        ];
+
+        const canvas = document.getElementById('wheel');
+        const ctx = canvas.getContext('2d');
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = canvas.width / 2 - 10;
+
+        let currentRotation = 0;
+        let isSpinning = false;
+        let hasReviewed = false; // Changez à true pour tester localement
+
+        // Dessiner la roue
+        function drawWheel() {
+            const anglePerPrize = (2 * Math.PI) / prizes.length;
+
+            prizes.forEach((prize, index) => {
+                const startAngle = index * anglePerPrize + currentRotation;
+                const endAngle = startAngle + anglePerPrize;
+
+                // Dessiner la section
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = prize.color;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                // Dessiner le texte
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(startAngle + anglePerPrize / 2);
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 16px Arial';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                ctx.shadowBlur = 3;
+                
+                // Icône
+                ctx.font = '30px Arial';
+                ctx.fillText(prize.icon, radius * 0.7, -10);
+                
+                // Texte
+                ctx.font = 'bold 14px Arial';
+                ctx.fillText(prize.text, radius * 0.7, 15);
+                
+                ctx.restore();
+            });
+        }
+
+        drawWheel();
+
+        // Vérifier et faire tourner
+        function checkAndSpin() {
+            if (isSpinning) return;
+
+            if (!hasReviewed) {
+                // Rediriger vers la page d'avis
+                window.location.href = '/avis?wheel=true';
+            } else {
+                spinWheel();
+            }
+        }
+
+        // Faire tourner la roue
+        function spinWheel() {
+            if (isSpinning) return;
+            
+            isSpinning = true;
+            document.getElementById('spinBtn').disabled = true;
+
+            // Rotation aléatoire (10-15 tours + position aléatoire)
+            const spins = 10 + Math.random() * 5;
+            const degrees = spins * 360 + Math.random() * 360;
+            const radians = (degrees * Math.PI) / 180;
+
+            const startTime = Date.now();
+            const duration = 4000; // 4 secondes
+
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function pour ralentir progressivement
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                
+                currentRotation = radians * easeOut;
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawWheel();
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // Animation terminée
+                    isSpinning = false;
+                    showResult();
+                }
+            }
+
+            animate();
+        }
+
+        // Afficher le résultat
+        function showResult() {
+            // Calculer le prix gagné
+            const normalizedRotation = currentRotation % (2 * Math.PI);
+            const anglePerPrize = (2 * Math.PI) / prizes.length;
+            
+            // L'index est inversé car la roue tourne dans le sens horaire
+            let prizeIndex = Math.floor((2 * Math.PI - normalizedRotation) / anglePerPrize);
+            prizeIndex = (prizeIndex + prizes.length) % prizes.length;
+            
+            const prize = prizes[prizeIndex];
+
+            // Afficher la popup
+            document.getElementById('resultIcon').textContent = prize.icon;
+            document.getElementById('resultTitle').textContent = 'Félicitations !';
+            document.getElementById('resultDescription').textContent = `Vous avez gagné : ${prize.text}`;
+            document.getElementById('prizeCode').textContent = prize.code;
+            document.getElementById('resultPopup').classList.add('show');
+
+            // Envoyer au serveur pour tracking (optionnel)
+            fetch('/api/wheel-prize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    prize: prize.text,
+                    code: prize.code,
+                    timestamp: new Date().toISOString()
+                })
+            }).catch(err => console.log('Tracking error:', err));
+        }
+
+        // Fermer la popup
+        function closePopup() {
+            document.getElementById('resultPopup').classList.remove('show');
+            document.getElementById('spinBtn').disabled = false;
+            document.getElementById('spinBtn').textContent = '🎰 Tourner à nouveau !';
+        }
+
+        // Vérifier si l'utilisateur vient de laisser un avis
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('reviewed') === 'true') {
+            hasReviewed = true;
+            document.getElementById('spinBtn').textContent = '🎰 Tourner la roue !';
+            document.querySelector('.intro-text').innerHTML = '<strong>🎉 Merci pour votre avis !</strong><br>Vous pouvez maintenant tourner la roue et gagner un cadeau 🎁';
+        }
+    </script>
+</body>
+</html>
